@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+		 id="WebApp_ID" version="3.0">
+
+	<display-name>O4C</display-name>
+
+	<!-- BEGIN SERVLETS -->
+	<!-- *** BEGIN REST *** -->
+	<servlet>
+		<servlet-name>Jersey REST Service</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>eu.dedalus.sop.o4c.services</param-value>
+		</init-param>
+		<init-param>
+			<param-name>jersey.config.server.provider.classnames</param-name>
+			<param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Jersey REST Service</servlet-name>
+		<url-pattern>/o4cServices/*</url-pattern>
+	</servlet-mapping>
+	<!-- *** END REST *** -->
+	<!-- *** BEGIN ATMOSPHERE *** -->
+	<servlet>
+		<servlet-name>AtmosphereServlet</servlet-name>
+		<servlet-class>org.atmosphere.cpr.AtmosphereServlet</servlet-class>
+		<async-supported>true</async-supported>
+		<init-param>
+			<param-name>org.atmosphere.websocket.maxTextMessageSize</param-name>
+			<param-value>1048576</param-value>
+		</init-param>
+		<init-param>
+            <param-name>org.atmosphere.kafka.propertiesFile</param-name>
+            <param-value>WEB-INF/classes/kafka.properties</param-value>
+        </init-param>  
+        <!-- <init-param>
+	        <param-name>org.atmosphere.cpr.broadcasterClass</param-name>
+	        <param-value>org.atmosphere.plugin.jgroups.JGroupsBroadcaster</param-value>
+		</init-param> -->
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AtmosphereServlet</servlet-name>
+		<url-pattern>/clinicalevent/manager/*</url-pattern>
+	</servlet-mapping>
+	<!-- *** END ATMOSPHERE *** -->
+	<!-- END SERVLETS -->
+
+</web-app>
